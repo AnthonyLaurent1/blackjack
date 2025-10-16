@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from "./pages/Home";
 import Game from "./pages/Game";
+
 import "./App.css";
 
 function App() {
@@ -12,7 +13,7 @@ function App() {
       </header>
       <Routes>
         <Route path="/" element={<Home />} />
-        <Route path="/game/:gameId" element={<Game />} />
+        <Route path="/game/:gameId" element={<Game />} /> 
       </Routes>
     </Router>
   );
