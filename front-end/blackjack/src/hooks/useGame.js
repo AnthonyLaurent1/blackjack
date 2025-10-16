@@ -3,71 +3,47 @@ import * as api from "../services/apiService";
 
 export const useGame = (gameId) => {
   const [game, setGame] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [winner, setWinner] = useState(null);
 
-  useEffect(() => {
-    const loadGame = async () => {
-      try {
-        const g = await api.getGame(gameId);
-        setGame(g);
-
-        if (g.ended) {
-          const winnerData = await api.getWinner(gameId);
-          setWinner(winnerData);
-        }
-      } catch (err) {
-        console.error("Erreur de chargement du jeu :", err);
-      } finally {
-        setLoading(false);
+  const updateGame = async () => {
+    try {
+      const g = await api.getGame(gameId);
+      setGame(g);
+      if (g.ended) {
+        const winnerData = await api.getWinner(gameId);
+        setWinner(winnerData);
       }
-    };
+    } catch (err) {
+      console.error("Erreur lors de la mise à jour du jeu :", err);
+    }
+  };
 
-    loadGame();
-    const interval = setInterval(loadGame, 1500);
+  useEffect(() => {
+    updateGame(); 
+    const interval = setInterval(updateGame, 1500);
     return () => clearInterval(interval);
   }, [gameId]);
 
-  const handleRoll = async (playerId) => {
+  const action = async (action, playerId) => {
     try {
-      await api.roll(playerId);
-      const updatedGame = await api.getGame(gameId);
-      setGame(updatedGame);
-
-      if (updatedGame.ended) {
-        const winnerData = await api.getWinner(gameId);
-        setWinner(winnerData);
-      }
+      await action(playerId);
+      await updateGame();
     } catch (err) {
-      console.error("Erreur lors du lancer :", err);
+      console.error("Erreur lors de l'action :", err);
     }
   };
 
-  const handleStand = async (playerId) => {
-    try {
-      await api.stand(playerId);
-      const updatedGame = await api.getGame(gameId);
-      setGame(updatedGame);
+  const roll = (playerId) => action(api.roll, playerId);
+  const stand = (playerId) => action(api.stand, playerId);
 
-      if (updatedGame.ended) {
-        const winnerData = await api.getWinner(gameId);
-        setWinner(winnerData);
-      }
-    } catch (err) {
-      console.error("Erreur lors du stand :", err);
-    }
-  };
+  const isPlayerActive = (player) => !player.stand && player.score <= 21 && !game?.ended;
 
-  const isPlayerActive = (player) => {
-    return !player.stand && player.score <= 21 && !game?.ended;
-  };
-
-  return {
-    game,
-    loading,
+  return { 
+    game, 
     winner,
-    handleRoll,
-    handleStand,
-    isPlayerActive,
+    roll, 
+    stand,
+    isPlayerActive
   };
+
 };

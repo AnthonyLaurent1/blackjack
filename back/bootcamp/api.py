@@ -1,39 +1,10 @@
 from ninja import NinjaAPI, Schema
 from blackjack.models import Game
 from blackjack import service
-from typing import List
+from blackjack.schemas import *
 
 
 api = NinjaAPI()
-
-class PlayerSchema(Schema):
-    id: int
-    name: str
-    score: int
-    stand: bool
-
-class GameSchema(Schema):
-    id: int
-    name: str
-    turn: int
-    ended: bool
-    players: List[PlayerSchema] = []
-
-
-class RollResult(Schema):
-    player_id: int
-    roll: int
-    score: int
-    message: str
-
-class WinnerSchema(Schema):
-    winners: List[str]
-    scores: dict
-
-
-class NameSchema(Schema):
-    name: str
-
 
 
 @api.post("/game/", response=GameSchema)

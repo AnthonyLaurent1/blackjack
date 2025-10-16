@@ -6,9 +6,8 @@ import "../styles/game.css";
 
 const Game = () => {
   const { gameId } = useParams();
-  const { game, loading, rollMessages, winner, handleRoll, handleStand } = useGame(gameId);
+  const { game, rollMessages, winner, roll, stand } = useGame(gameId);
 
-  if (loading) return <div className="game-loading">Chargement...</div>;
   if (!game) return <div className="game-error">Partie non trouvée</div>;
 
   return (
@@ -18,8 +17,8 @@ const Game = () => {
         game={game}
         rollMessages={rollMessages}
         winner={winner}
-        onRoll={handleRoll}
-        onStand={handleStand}
+        onRoll={roll}
+        onStand={stand}
       />
     </div>
   );

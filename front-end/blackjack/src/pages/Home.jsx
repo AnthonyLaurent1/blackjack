@@ -14,8 +14,7 @@ const Home = () => {
     setPlayerInput,
     addPlayerToList,
     removePlayerFromList,
-    handleCreateGame,
-    loading,
+    createGame,
   } = useGameSetup();
 
   return (
@@ -36,13 +35,11 @@ const Home = () => {
         playerInput={playerInput}
         setPlayerInput={setPlayerInput}
         addPlayer={addPlayerToList}
-        disabled={loading}
       />
 
       <GameSetupButtons
-        handleCreateGame={handleCreateGame}
+        createGame={createGame}
         playersLength={players.length}
-        loading={loading}
       />
     </div>
   );

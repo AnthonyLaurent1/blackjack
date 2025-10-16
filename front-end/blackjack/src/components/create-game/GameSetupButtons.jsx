@@ -1,11 +1,11 @@
 import React from "react";
 
-const GameSetupButtons = ({ handleCreateGame, playersLength }) => {
+const GameSetupButtons = ({ createGame, playersLength }) => {
   if (playersLength === 0) return null;
 
   return (
     <button
-      onClick={handleCreateGame}
+      onClick={createGame}
       className="btn launch-btn"
     >
       {"Lancer la partie"}

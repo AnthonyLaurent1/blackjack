@@ -19,26 +19,21 @@ def next_turn(game: Game):
     total_players = len(players)
     if total_players == 0:
         return
-
     for _ in range(total_players):
         game.turn = (game.turn + 1) % total_players
         next_player = players[game.turn]
-    
         if not next_player.stand and next_player.score <= 21:
             game.save()
             return
 
 
-
 def check_end_condition(game: Game):
     players = list(game.players.all())
     active_players = [p for p in players if not p.stand and p.score <= 21]
-
     if any(p.score == 21 for p in players) or len(active_players) == 0:
         game.ended = True
         game.save()
         return True
-
     return False
 
 
@@ -69,6 +64,7 @@ def roll_dice(player_id: int):
         game.ended = True
         game.save()
         return {"player_id": player.id, "roll": roll_value, "score": player.score, "message": message}
+    
     elif player.score > 21:
         message = "Vous avez dépassé 21"
         player.stand = True 
